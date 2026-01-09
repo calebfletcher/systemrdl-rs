@@ -447,7 +447,7 @@ fn constraint_value(i: &mut Tokens<'_>) -> Result<ConstraintValue> {
     ))
     .parse_next(i)?
     {
-        return Ok(ConstraintValue::Range(a, b));
+        Ok(ConstraintValue::Range(a, b))
     } else {
         fail.parse_next(i)
     }
@@ -1131,8 +1131,14 @@ fn binary_operator(i: &mut Tokens<'_>) -> Result<BinaryOp> {
         // Some(Token::GreaterThan) => Ok(BinaryOp::GreaterThan),
         // Some(Token::LessThanOrEqual) => Ok(BinaryOp::LessThanOrEqual),
         // Some(Token::GreaterThanOrEqual) => Ok(BinaryOp::GreaterThanOrEqual),
-        // Some(Token::RightShift) => Ok(BinaryOp::RightShift),
-        // Some(Token::LeftShift) => Ok(BinaryOp::LeftShift),
+        Some(Token {
+            kind: TokenKind::RightShift,
+            ..
+        }) => Ok(BinaryOp::RightShift),
+        Some(Token {
+            kind: TokenKind::LeftShift,
+            ..
+        }) => Ok(BinaryOp::LeftShift),
         Some(Token {
             kind: TokenKind::And,
             ..

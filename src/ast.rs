@@ -3,7 +3,7 @@
 //! Abstract Syntax Tree (AST) for SystemRDL parser.
 
 use crate::parser::{root, tokens};
-use crate::{token_iter::TokenIter, Bits, FileSource, Token, TokenKind, Tokens};
+use crate::{Bits, FileSource, Token, TokenKind, Tokens, token_iter::TokenIter};
 use std::path::Path;
 use winnow::Parser;
 
