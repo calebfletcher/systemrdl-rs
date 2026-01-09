@@ -218,6 +218,14 @@ impl<'a> Iterator for Lexer<'a> {
                     Some('>') => Some(TokenKind::Pointer),
                     _ => Some(TokenKind::Error),
                 },
+                Some('>') => match iter.next() {
+                    Some('>') => Some(TokenKind::RightShift),
+                    _ => Some(TokenKind::Error),
+                },
+                Some('<') => match iter.next() {
+                    Some('<') => Some(TokenKind::LeftShift),
+                    _ => Some(TokenKind::Error),
+                },
                 None => None,
                 _ => Some(TokenKind::Error),
             };

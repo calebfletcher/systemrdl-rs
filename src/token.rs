@@ -104,6 +104,8 @@ pub enum TokenKind<'a> {
     Quote,
     Or,
     And,
+    LeftShift,
+    RightShift,
 
     Identifier(&'a str),
     StringLiteral(&'a str),
