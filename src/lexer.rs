@@ -1,6 +1,6 @@
 // Licensed under the Apache-2.0 license.
 
-use crate::{token::TokenKind, Bits};
+use crate::{Bits, token::TokenKind};
 use std::str::{Chars, FromStr};
 
 pub type Span = std::ops::Range<usize>;
@@ -63,7 +63,7 @@ impl<'a> Iterator for Lexer<'a> {
                 Some('"') => loop {
                     match iter.next() {
                         Some('"') => {
-                            break Some(TokenKind::StringLiteral(str_between(&self.iter, &iter)))
+                            break Some(TokenKind::StringLiteral(str_between(&self.iter, &iter)));
                         }
                         Some('\\') => match iter.next() {
                             Some(_) => continue,
@@ -218,6 +218,14 @@ impl<'a> Iterator for Lexer<'a> {
                     Some('>') => Some(TokenKind::Pointer),
                     _ => Some(TokenKind::Error),
                 },
+                Some('>') => match iter.next() {
+                    Some('>') => Some(TokenKind::RightShift),
+                    _ => Some(TokenKind::Error),
+                },
+                Some('<') => match iter.next() {
+                    Some('<') => Some(TokenKind::LeftShift),
+                    _ => Some(TokenKind::Error),
+                },
                 None => None,
                 _ => Some(TokenKind::Error),
             };
@@ -253,7 +261,7 @@ fn next_while(iter: &mut Chars, mut f: impl FnMut(char) -> bool) {
     }
 }
 
-fn parse_num(s: &str, radix: u32) -> TokenKind {
+fn parse_num(s: &str, radix: u32) -> TokenKind<'_> {
     let replaced;
     let s = if s.contains('_') {
         replaced = s.replace('_', "");

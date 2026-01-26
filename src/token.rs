@@ -1,7 +1,7 @@
 // Licensed under the Apache-2.0 license.
 
-use crate::ast::{AccessType, AddressingType, OnReadType, OnWriteType, PrecedenceType};
 use crate::Bits;
+use crate::ast::{AccessType, AddressingType, OnReadType, OnWriteType, PrecedenceType};
 use std::fmt::Display;
 use winnow::Parser;
 use winnow::Result;
@@ -42,21 +42,21 @@ impl winnow::stream::ContainsToken<&'_ Token<'_>> for TokenKind<'_> {
 impl winnow::stream::ContainsToken<&'_ Token<'_>> for &'_ [TokenKind<'_>] {
     #[inline]
     fn contains_token(&self, token: &'_ Token<'_>) -> bool {
-        self.iter().any(|t| *t == token.kind)
+        self.contains(&token.kind)
     }
 }
 
 impl<const LEN: usize> winnow::stream::ContainsToken<&'_ Token<'_>> for &'_ [TokenKind<'_>; LEN] {
     #[inline]
     fn contains_token(&self, token: &'_ Token<'_>) -> bool {
-        self.iter().any(|t| *t == token.kind)
+        self.contains(&token.kind)
     }
 }
 
 impl<const LEN: usize> winnow::stream::ContainsToken<&'_ Token<'_>> for [TokenKind<'_>; LEN] {
     #[inline]
     fn contains_token(&self, token: &'_ Token<'_>) -> bool {
-        self.iter().any(|t| *t == token.kind)
+        self.contains(&token.kind)
     }
 }
 
@@ -104,6 +104,8 @@ pub enum TokenKind<'a> {
     Quote,
     Or,
     And,
+    LeftShift,
+    RightShift,
 
     Identifier(&'a str),
     StringLiteral(&'a str),
